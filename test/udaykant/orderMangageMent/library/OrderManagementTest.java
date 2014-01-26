@@ -106,6 +106,7 @@ public class OrderManagementTest {
         String sql1 = "DELETE FROM order_management.products where product_id = 100";
         int actual = statement.executeUpdate(sql1);
         Assert.assertEquals(actual, 1);
+
         closeConnection(connection);
     }
 

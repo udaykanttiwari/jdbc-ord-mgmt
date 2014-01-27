@@ -6,9 +6,6 @@ import java.sql.Statement;
 import junit.framework.Assert;
 import org.junit.Test;
 
-import javax.swing.plaf.nimbus.State;
-
-
 public class OrderManagementTest {
     @org.junit.Before
     public void setUp() throws Exception {
@@ -150,6 +147,15 @@ public class OrderManagementTest {
         int actual = statement.executeUpdate(sql1);
         org.junit.Assert.assertEquals(expected, actual);
     }
+    @Test
+    public void inserted_customer_detail() throws SQLException {
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+        String sql = "INSERT INTO order_management.customer_detail(customer_id,customer_name,address1," +
+                "address2,pincode)  values ('1','uday','bodva','balipur','230139')";
+        int actual = statement.executeUpdate(sql);
+        org.junit.Assert.assertTrue(actual == 1);
+    }
 
     @Test
     public void delete_inserted_customer_detail() throws SQLException {
@@ -188,6 +194,23 @@ public class OrderManagementTest {
         int actual = statement.executeUpdate(queryForDeleteOrder);
         org.junit.Assert.assertTrue(actual == 1);
     }
+    @Test
+            (expected = SQLIntegrityConstraintViolationException.class)
+    public void delete_customer_id_when_customer_id_is_foreign_key_in_order_info() throws SQLException {
+        int expected = 0;
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+        String sql = "INSERT INTO order_management.customer_detail(customer_id,customer_name,address1," +
+                "address2,pincode)  values ('1','uday','bodva','balipur','230139')";
+        statement.executeUpdate(sql);
+        String queryForInsertingOrderInfo = "INSERT INTO order_management.order_item_info(order_id,customer_id,date_of_order,date_of_delivery,total_amount" +
+                ")  values ('101','1','2014-01-23','2014-01-26','1000')";
+        statement.executeUpdate(queryForInsertingOrderInfo);
+        String queryForDeleteOrder = "delete from order_management.customer_detail where customer_id =1";
+        int actual = statement.executeUpdate(queryForDeleteOrder);
+        org.junit.Assert.assertTrue(actual == expected);
+    }
+
     @org.junit.After
     public void tearDown() throws Exception {
         Connection connection = createConnection();

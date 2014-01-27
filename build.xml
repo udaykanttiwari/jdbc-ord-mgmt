@@ -1,0 +1,26 @@
+<project name="jdbc-ord-mgmt" default="run_test" basedir=".">
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <path id="classPath">
+        <fileset dir="dependencies" includes="*.jar"/>
+    </path>
+    <target name="createDir" depends="clean">
+        <mkdir dir="jdbc_ord_mgmt/test"/>
+    </target>
+        <target name="test_compile" depends="createDir">
+        <javac srcdir="test" destdir="jdbc_ord_mgmt/test" classpath="jdbc_ord_mgmt/test" classpathref="classPath"
+               includeantruntime="false"/>
+    </target>
+    <target name="run_test" depends="test_compile">
+        <java classname="org.junit.runner.JUnitCore"
+              classpath="dependencies/junit-4.10.jar;dependencies/mariadb-java-client-1.1.5.jar;jdbc_ord_mgmt/test;jdbc_ord_mgmt/src">
+            <arg value="udaykant.orderMangageMent.library.OrderManagementTest"/>
+        </java>
+    </target>
+</project>
+
+
+
+

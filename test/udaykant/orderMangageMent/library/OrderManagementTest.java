@@ -169,11 +169,25 @@ public class OrderManagementTest {
         String sql = "INSERT INTO order_management.customer_detail(customer_id,customer_name,address1," +
                 "address2,pincode)  values ('1','uday','bodva','balipur','230139')";
         statement.executeUpdate(sql);
-        sql = "DELETE FROM order_management.customer_detail where customer_id = 1";
-        int actual = statement.executeUpdate(sql);
+        String queryForInsertingOrderInfo = "INSERT INTO order_management.order_item_info(order_id,customer_id,date_of_order,date_of_delivery,total_amount" +
+        ")  values ('101','1','2014-01-23','2014-01-26','1000')";
+        int actual = statement.executeUpdate(queryForInsertingOrderInfo);
         org.junit.Assert.assertTrue(actual == 1);
     }
-
+    @Test
+    public void delete_order_info_where_order_id_is_one_not_one() throws SQLException {
+        Connection connection = createConnection();
+        Statement statement = connection.createStatement();
+        String sql = "INSERT INTO order_management.customer_detail(customer_id,customer_name,address1," +
+                "address2,pincode)  values ('1','uday','bodva','balipur','230139')";
+        statement.executeUpdate(sql);
+        String queryForInsertingOrderInfo = "INSERT INTO order_management.order_item_info(order_id,customer_id,date_of_order,date_of_delivery,total_amount" +
+                ")  values ('101','1','2014-01-23','2014-01-26','1000')";
+        statement.executeUpdate(queryForInsertingOrderInfo);
+        String queryForDeleteOrder = "delete from order_management.order_item_info where order_id =101";
+        int actual = statement.executeUpdate(queryForDeleteOrder);
+        org.junit.Assert.assertTrue(actual == 1);
+    }
     @org.junit.After
     public void tearDown() throws Exception {
         Connection connection = createConnection();
